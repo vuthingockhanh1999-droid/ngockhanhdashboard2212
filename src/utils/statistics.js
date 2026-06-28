@@ -113,18 +113,20 @@ const generateKPICards = (headers, rows, columnMeta, numericStats) => {
   // 1. Thẻ KPI Tổng số lượng nhân sự (Dựa trên tổng số dòng)
   cards.push({
     id: `kpi-total-rows`,
-    title: `Tổng số nhân sự`,
+    title: `Tổng số lượng nhân sự`,
     value: rows.length,
     formattedValue: new Intl.NumberFormat('vi-VN').format(rows.length),
     type: 'number',
     icon: 'Users',
     color: colors[colorIdx++ % colors.length],
-    subtitle: 'Đếm theo số lượng dòng (bản ghi)'
+    subtitle: 'Dựa trên tổng số dòng dữ liệu'
   });
 
   // Prioritize currency and percentage
   columnMeta.filter(c => c.type === 'currency' || c.type === 'percentage').forEach(col => {
     if (cards.length >= 8) return;
+    if (col.name.includes('Untitled Column')) return; // Bỏ qua các cột không có tiêu đề
+    
     const stats = numericStats[col.name];
     if (stats) {
        const isCurrency = col.type === 'currency';
@@ -146,6 +148,8 @@ const generateKPICards = (headers, rows, columnMeta, numericStats) => {
   // Then numbers
   columnMeta.filter(c => c.type === 'number').forEach(col => {
     if (cards.length >= 8) return;
+    if (col.name.includes('Untitled Column')) return; // Bỏ qua các cột không có tiêu đề
+    
     const stats = numericStats[col.name];
     if (stats) {
        cards.push({
