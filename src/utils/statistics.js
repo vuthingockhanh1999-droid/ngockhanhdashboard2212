@@ -110,6 +110,18 @@ const generateKPICards = (headers, rows, columnMeta, numericStats) => {
   const colors = ['primary', 'accent', 'emerald', 'amber', 'rose', 'blue', 'purple', 'pink'];
   let colorIdx = 0;
 
+  // 1. Thẻ KPI Tổng số lượng nhân sự (Dựa trên tổng số dòng)
+  cards.push({
+    id: `kpi-total-rows`,
+    title: `Tổng số nhân sự`,
+    value: rows.length,
+    formattedValue: new Intl.NumberFormat('vi-VN').format(rows.length),
+    type: 'number',
+    icon: 'Users',
+    color: colors[colorIdx++ % colors.length],
+    subtitle: 'Đếm theo số lượng dòng (bản ghi)'
+  });
+
   // Prioritize currency and percentage
   columnMeta.filter(c => c.type === 'currency' || c.type === 'percentage').forEach(col => {
     if (cards.length >= 8) return;
